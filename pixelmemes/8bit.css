@@ -1,0 +1,28 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body{
+	background-color:#222222;
+	padding: 2em;
+}
+
+#caption{
+
+	width:64%;
+	font-family:"Courier New", Courier, monospace;
+	font-size:24px;
+	margin-left:13%;
+	margin-top:0;
+	border:solid;
+	border-width:10px;
+}
+
+ul {
+background-color:#222222;
+width:60%;
+}
+
+a {
+	color:#00DD00;
+	text-decoration:none;
+}
