@@ -386,3 +386,5 @@ canvas.addEventListener('touchstart', function(e) {
 // draw an empty page................................................................................................................
 
 render(context);
+
+alert('YOU SUCK AT JEWEL THEIF, YOU REALLY SUCK SUCK');
