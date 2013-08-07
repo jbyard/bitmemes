@@ -3,19 +3,27 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>PixelMemes.com - you want pixel art with a caption? we got that, big guy. </title>
-<link rel='stylesheet' type='text/css' href='8bit.css' media='all' />
+<link rel='stylesheet' type='text/css' href='bmDefault.css' media='all' />
 </head>
 
 <body>
 <canvas id='canvas' width='750' height='500'>canvas not supported</canvas>
-<script src="mage.js"></script>
-<script src="abobo.js"></script>
-<script src="pixelPaint.js"></script>
+<script src="clipart/mage.js"></script>
+<script src="clipart/abobo.js"></script>
+<script src="clipart/kopa.js"></script>
+<script src="clipart/noid.js"></script>
+<script src="bitmeme.js"></script>
 <input type="text" id="caption" />
+<div id='panel'>
+<a hef="#" onclick="changeRes(8); return false;">8bit</a></br>
+<a hef="#" onclick="changeRes(16); return false;">16bit</a>
 <ul>
-<li><a href="#" onclick="loadSquares(mage); return false;">black mage</a></li>
-<li><a href="#" onclick="loadSquares(abobo); return false;">abobo</a></li>
-
+<li onclick="loadSquares(mage); return false;"><a href="#">mage</a></li>
+<li onclick="loadSquares(abobo); return false;"><a href="#">abobo</a></li>
+<li onclick="loadSquares(kopa); return false;"><a href="#">kopa</a></li>
+<li onclick="loadSquares(noid); return false;"><a href="#">noid</a></li>
 </ul>
+<a href="#" onclick="makeJSON(); return false">make JSON</a>
+</div>
 </body>
 </html>
