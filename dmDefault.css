@@ -2,7 +2,7 @@
 /* CSS Document */
 
 body{
-  background-color:#222222;
+	background-color:#222222;
 	padding: 2em;
 }
 
@@ -17,9 +17,13 @@ body{
 	border-width:10px;
 }
 
-ul {
-background-color:#222222;
-width:60%;
+#panel {
+	position:absolute;
+	right: 0;
+	top:0;
+	width:20%;
+	border:solid;
+	background-color:#444444;
 }
 
 a {
