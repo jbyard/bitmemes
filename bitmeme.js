@@ -1,7 +1,7 @@
 // establish canvas and context.....................................................................................................
 
 var canvas = document.getElementById('canvas'),
-  context = canvas.getContext('2d');
+	context = canvas.getContext('2d');
 	
 canvas.width = 900;
 canvas.height = 600;
@@ -10,10 +10,10 @@ canvas.height = 600;
 
 
 var clicking = false;
-var pixelSize = 18;
+var pixelSize = 16;
 var selectedColor = 'fcfcfc';
 var selectedTool = "";
-var swatchSize = 17;
+var swatchSize = 16;
 var sheet = { 
 	x: 75,
 	y: 100,
@@ -23,6 +23,13 @@ var sheet = {
 
 var captionInput = document.getElementById('caption');
 var undo = Array;
+
+logo = new Image();
+logo.ready = false;
+logo.src = 'siteImages/logo_small.png';
+logo.onload = function(e) {
+	logo.ready=true;
+}
 
 // objects..........................................................................................................................
 
@@ -96,7 +103,7 @@ var squares = Array();
 
 for (var col = 0; col < sheet.cols; ++col) {
   for (var row	 = 0; row < sheet.rows; ++row) {	
-		squares.push(new Square(sheet.x + (pixelSize * col), 10 + (pixelSize * row)));
+		squares.push(new Square(sheet.x + (pixelSize * col),(pixelSize * row)));
   }
 }
 
@@ -191,14 +198,6 @@ fillTool.fill = function(square) {
 	}
 }
 
-var saveTool = new Swatch(sheet.x - swatchSize * 4, (pallet[pallet.length-1] ).y + swatchSize * 4);
-saveTool.size = swatchSize * 2;
-saveTool.save = function() {
-	
-	
-	document.write(JSON.stringify(undo));
-
-}
 
 
 // a bunch o' functions.........................................................................................................
@@ -207,7 +206,6 @@ function drawTools(context) {
 	
 	paintTool.draw(context);
 	fillTool.draw(context);	
-	saveTool.draw(context);
 	
 }
 
@@ -239,6 +237,7 @@ function drawCaption(context, caption) {
 	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 2]).y );
 }
 
+
 function render(context) {
 	
 	context.clearRect ( 0, 0, canvas.width, canvas.height);
@@ -246,8 +245,30 @@ function render(context) {
 	drawSquares(context);
 	drawPallet(context);
 	drawTools(context);
-	
 	drawCaption(context,caption.value);
+
+	if (logo.ready) {
+		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 127, (sheet.rows * pixelSize) - 27);	
+	}
+}
+
+function changeRes(res) {
+	var previous = cloneSquares(squares);
+	
+	switch (res) {
+	  case 8: pixelSize = 16;
+	  			sheet.cols = 42;
+				sheet.rows = 30;
+	     break
+	
+	  case 16: pixelSize = 8;
+	  			 sheet.cols = 84;
+				 sheet.rows = 60;
+		 break
+	
+	}
+
+	render(context);
 }
 
 function cloneSquares(originals) {
@@ -263,8 +284,14 @@ function cloneSquares(originals) {
 }
 
 function loadSquares(f) {
+	
 	squares = cloneSquares(JSON.parse(f));
 	render(context);
+}
+
+function makeJSON() {
+	
+	document.write(JSON.stringify(undo));
 }
 
 function detect(loc) {
@@ -302,12 +329,6 @@ function detect(loc) {
 		selectedTool = fillTool;
 		fillTool.selected = true;
 		paintTool.selected = false;
-	} 
-	
-	saveTool.createPath(context);
-	if (context.isPointInPath(loc.x, loc.y)) {
-		saveTool.save();
-	
 	} 
 		
 	// check to see if mouse is over any Swatches
