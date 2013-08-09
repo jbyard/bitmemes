@@ -248,7 +248,7 @@ function render(context) {
 	drawCaption(context,caption.value);
 
 	if (logo.ready) {
-		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 127, (sheet.rows * pixelSize) - 27);	
+		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 202, (sheet.rows * pixelSize) - 27);	
 	}
 }
 
