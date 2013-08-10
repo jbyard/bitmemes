@@ -2,7 +2,7 @@
 
 var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d');
-	
+
 canvas.width = 900;
 canvas.height = 600;
 
@@ -10,15 +10,15 @@ canvas.height = 600;
 
 
 var clicking = false;
-var pixelSize = 16;
+var pixelSize = 8;
 var selectedColor = 'fcfcfc';
 var selectedTool = "";
 var swatchSize = 16;
 var sheet = { 
 	x: 75,
 	y: 100,
-	cols:42,
-	rows:30   
+	cols:84,
+	rows:60
 };
 
 var captionInput = document.getElementById('caption');
@@ -34,7 +34,7 @@ logo.onload = function(e) {
 // objects..........................................................................................................................
 
 var Square = function (x,y) {
-	
+
 	this.x = x;
 	this.y = y;
 	this.color = '#000';
@@ -43,68 +43,58 @@ var Square = function (x,y) {
 Square.prototype = {
 
 	createPath: function (context) {
-		
+
 		context.beginPath();
 		context.moveTo(this.x, this.y);
 		context.rect(this.x, this.y, pixelSize, pixelSize);
 
 		context.closePath();
 	},
-	
+
 	draw: function (context) {
-	
+
 		this.createPath(context);	
 		context.fillStyle = this.color;
 		context.fill();
 
 	}
-						
+
 }
 
 
 var Swatch = function (x, y) {
-	
+
 	this.x = x;
 	this.y = y;
 	this.color = "white";
 	this.selected = false;
 	this.size = swatchSize;
-	
+
 }
 
 Swatch.prototype = {
-	
+
 	createPath: function (context) {
 		context.beginPath();
 		context.moveTo(this.x, this.y);
 		context.rect(this.x, this.y, this.size, this.size);
 		context.closePath()
 	},
-	
+
 	draw: function (context) {
-		
+
 		this.createPath(context);
 		context.fillStyle = this.color;
 		context.fill();
-		
+
 		if (this.selected) {
 			context.strokeStyle = 'orange';
 		}
-		
+
 		context.stroke();
 		context.strokeStyle = 'black';
 	}
-		
-}
 
-// create an array of squares......................................................................................................
-
-var squares = Array();
-
-for (var col = 0; col < sheet.cols; ++col) {
-  for (var row	 = 0; row < sheet.rows; ++row) {	
-		squares.push(new Square(sheet.x + (pixelSize * col),(pixelSize * row)));
-  }
 }
 
 
@@ -177,20 +167,30 @@ pallet[55].color  = 'rgba(0,0,0,0)';
 
 // create the tools..............................................................................................................
 
-var paintTool = new Swatch(sheet.x - swatchSize * 4, (pallet[pallet.length-1] ).y + swatchSize * 2);
+var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,
+										sheet.rows * pixelSize + 2);
 
 paintTool.selected = true;
-paintTool.size  = swatchSize * 2;
+paintTool.size  = swatchSize;
 paintTool.paint = function(square) {
    square.color = selectedColor;
 }
 selectedTool = paintTool;
 
-var fillTool  = new Swatch(sheet.x - swatchSize * 2,(pallet[pallet.length-1] ).y + swatchSize * 2);
+var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50, 
+								sheet.rows * pixelSize + 2);
 
-fillTool.size = swatchSize * 2;
+eightBitTool.size  = swatchSize * 2;
+eightBitTool.paint = function(square) {
+	  square.color = selectedColor;
+}
+
+var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50, 
+									    sheet.rows * pixelSize + 2);
+
+fillTool.size = swatchSize * 3;
 fillTool.fill = function(square) {
-	
+
 	for (var count = 0; count < squares.length; ++count) {
 		if (squares[count].color == square.color) {
 			squares[count].color = selectedColor;	
@@ -203,10 +203,11 @@ fillTool.fill = function(square) {
 // a bunch o' functions.........................................................................................................
 
 function drawTools(context) {
-	
+
 	paintTool.draw(context);
+	eightBitTool.draw(context);
 	fillTool.draw(context);	
-	
+
 }
 
 function drawPallet(context) {
@@ -214,34 +215,34 @@ function drawPallet(context) {
 	for (var q = 0; q < pallet.length; ++q) {
 	pallet[q].draw(context);
 	}
-		
+
 }
 
 function drawSquares(context) {
-	
+
 	for (var count = 0; count < squares.length; ++count) {
 	squares[count].draw(context);	
 	}
-	
+
 }
 
 function drawCaption(context, caption) {
-	var size = (350 / Math.pow(-1.1, caption.length)) + 16;
-	
+	var size = 48;
+
 	context.font =  + size + "px sans-serif";
 	context.textAlign = 'center';
     context.fillStyle = "white";
-	
-	context.fillText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 2]).y );
-	
-	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 2]).y );
+
+	context.fillText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
+
+	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
 }
 
 
 function render(context) {
-	
+
 	context.clearRect ( 0, 0, canvas.width, canvas.height);
-	
+
 	drawSquares(context);
 	drawPallet(context);
 	drawTools(context);
@@ -254,18 +255,33 @@ function render(context) {
 
 function changeRes(res) {
 	var previous = cloneSquares(squares);
-	
+
 	switch (res) {
-	  case 8: pixelSize = 16;
+	  case 8: if (sheet.res != 8) {
+	  			pixelSize = 16;
 	  			sheet.cols = 42;
 				sheet.rows = 30;
+				 for (count1 = 0,count2 = 0; count1 < squares.length; ++count1, count2 + 2 ) {
+			      			squares[count1].color = previous[count].color;
+				  
+				 }
+				 sheet.res = 8;
+	  		   }
 	     break
-	
-	  case 16: pixelSize = 8;
-	  			 sheet.cols = 84;
-				 sheet.rows = 60;
+
+	  case 16:  
+	  			 if (sheet.res != 16) { 
+				 	pixelSize = 8;
+	  			 	sheet.cols = 84;
+				 	sheet.rows = 60;
+				 	squares = blankScreen();
+					 for (count1 = 0,count2 = 0; count2 < previous.length; count1 = count1 + 2, ++count2 ) {
+			      			squares[count1].color = previous[count2].color;
+					  }
+					sheet.res = 16;
+				 }
 		 break
-	
+
 	}
 
 	render(context);
@@ -273,38 +289,63 @@ function changeRes(res) {
 
 function cloneSquares(originals) {
 	var clones = Array();
-	
+
 	for (var count = 0; count < originals.length; ++count) {
 		var clone = new Square(originals[count].x,originals[count].y);
 		clone.color = originals[count].color;
 		clones.push(clone);
 	}
-	
+
 	return clones;
 }
 
 function loadSquares(f) {
-	
+
 	squares = cloneSquares(JSON.parse(f));
 	render(context);
 }
 
-function makeJSON() {
+function blankScreen() {
 	
+	var newSquares = Array();
+
+	for (var col = 0; col < sheet.cols; ++col) {
+  		for (var row	 = 0; row < sheet.rows; ++row) {	
+		newSquares.push(new Square(sheet.x + (pixelSize * col),(pixelSize * row)));
+ 		 }
+	 }	
+
+	return newSquares;
+
+}
+
+function makeJSON() {
+
 	document.write(JSON.stringify(undo));
 }
 
 function detect(loc) {
-	
+
 	// check to see if mouse is over any squares
-	
+
 	for (var count = 0; count < squares.length; ++count) {
 		squares[count].createPath(context);
 		if (context.isPointInPath(loc.x, loc.y)) { 		
-		
+
 			switch (selectedTool) {
 				case paintTool: paintTool.paint(squares[count]);
 			      break
+				case eightBitTool: eightBitTool.paint(squares[count]); //this is kinda ugly
+									down1 = count + 1;
+									eightBitTool.paint(squares[down1]);
+									bottomOfSheet = count % sheet.rows === 0;
+						
+									over1 = count + sheet.rows;
+									eightBitTool.paint(squares[over1]);
+									overDown = count + 1 + sheet.rows;
+									eightBitTool.paint(squares[overDown]);
+								
+				  break
 				case fillTool: fillTool.fill(squares[count]);
 				  break
 				default:  paintTool.paint(squares[count]);
@@ -312,48 +353,58 @@ function detect(loc) {
 			}
 		}
 	}
-	
+
 	// check to see if mouse is over any tools
-	
+
 	paintTool.createPath(context);
 	if (context.isPointInPath(loc.x, loc.y)) {
 		paintTool.color = selectedColor;
 		selectedTool = paintTool;
 		paintTool.selected = true;
+		eightBitTool.selected = false;
 		fillTool.selected = false;
 	} 
 	
+	eightBitTool.createPath(context);
+	if (context.isPointInPath(loc.x, loc.y)) {
+		eightBitTool.color = selectedColor;
+		selectedTool = eightBitTool;
+		paintTool.selected = false;
+		fillTool.selected = false;
+	} 
+
 	fillTool.createPath(context);
 	if (context.isPointInPath(loc.x, loc.y)) {
 		fillTool.color = selectedColor;
 		selectedTool = fillTool;
 		fillTool.selected = true;
+		eightBitTool.selected = false;
 		paintTool.selected = false;
 	} 
-		
+
 	// check to see if mouse is over any Swatches
-	
+
 	for (var f = 0; f < pallet.length; ++f) {
 		pallet[f].createPath(context);
 		if (context.isPointInPath(loc.x, loc.y)) {		
-			
+
 			selectedColor = pallet[f].color;
 			selectedTool.color = selectedColor;
-			
+
 		}
-	
+
 	}
-	
+
 }
 
 function windowToCanvas(canvas, x, y) {    
-	
+
 	var bbox = canvas.getBoundingClientRect();	
-	
+
 	return { x: (x - bbox.left) * (canvas.width / bbox.width),
 			  y: (y - bbox.top) * (canvas.height / bbox.height)
 	};
-	
+
 }
 
 
@@ -362,13 +413,13 @@ function windowToCanvas(canvas, x, y) {
 
 
 canvas.onmousemove = function (e){
-	
+
 	var loc = windowToCanvas(canvas, e.clientX, e.clientY);
-	
+
 	if (clicking) {
-	
+
 		detect(loc);
-		
+
 	}
 	render(context);
 }
@@ -384,27 +435,29 @@ canvas.addEventListener('touchend', function(e) {
 canvas.onmousedown = function (e) {
     
 	undo = cloneSquares(squares);
-	
+
 	var loc = windowToCanvas(canvas, e.clientX, e.clientY);
-	
+
 	clicking = true;
 	detect(loc);
-	
+
 	render(context);
-	
+
 }
 
 canvas.addEventListener('touchstart', function(e) {
 	var loc = windowToCanvas(canvas, e.clientX, e.clientY);
-	
+
 	clicking = true;
 	detect(loc);
-	
+
 	render(context);
 });
 
 
 // draw an empty page................................................................................................................
+
+var squares = blankScreen();
 
 render(context);
 
