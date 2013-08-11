@@ -13,10 +13,11 @@ var clicking = false;
 var pixelSize = 8;
 var selectedColor = 'fcfcfc';
 var selectedTool = "";
+var grid = false;
 var swatchSize = 16;
 var sheet = { 
 	x: 75,
-	y: 100,
+	y: 20,
 	cols:84,
 	rows:60
 };
@@ -167,7 +168,7 @@ pallet[55].color  = 'rgba(0,0,0,0)';
 
 // create the tools..............................................................................................................
 
-var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,
+var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,sheet.y + 
 										sheet.rows * pixelSize + 2);
 
 paintTool.selected = true;
@@ -177,7 +178,7 @@ paintTool.paint = function(square) {
 }
 selectedTool = paintTool;
 
-var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50, 
+var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50, sheet.y +
 								sheet.rows * pixelSize + 2);
 
 eightBitTool.size  = swatchSize * 2;
@@ -185,7 +186,7 @@ eightBitTool.paint = function(square) {
 	  square.color = selectedColor;
 }
 
-var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50, 
+var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50, sheet.y +
 									    sheet.rows * pixelSize + 2);
 
 fillTool.size = swatchSize * 3;
@@ -203,7 +204,8 @@ fillTool.fill = function(square) {
 // a bunch o' functions.........................................................................................................
 
 function drawTools(context) {
-
+	context.lineWidth= 4;
+	
 	paintTool.draw(context);
 	eightBitTool.draw(context);
 	fillTool.draw(context);	
@@ -211,7 +213,7 @@ function drawTools(context) {
 }
 
 function drawPallet(context) {
-
+	context.lineWidth= 1;
 	for (var q = 0; q < pallet.length; ++q) {
 	pallet[q].draw(context);
 	}
@@ -238,6 +240,30 @@ function drawCaption(context, caption) {
 	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
 }
 
+function drawGrid(context) {
+	context.strokeStyle = 'white';
+	context.lineWidth= 0.25;
+	
+	for (var vert = sheet.x; vert < sheet.x + (sheet.cols * pixelSize); vert += pixelSize) {
+		context.beginPath();
+		context.moveTo(vert, sheet.y);
+		context.lineTo(vert, sheet.y + (sheet.rows * pixelSize));		
+		context.stroke();
+	  }
+	  
+	for (var horz = sheet.y; horz < sheet.y + (sheet.rows * pixelSize); horz += pixelSize) {
+		context.beginPath();
+		context.moveTo(sheet.x, horz);
+		context.lineTo(sheet.x + (sheet.cols * pixelSize), horz);
+		context.stroke();	
+	 }
+	
+	
+}
+function toggleGrid() {
+	grid = grid ? false: true;
+	render(context);
+}
 
 function render(context) {
 
@@ -246,6 +272,7 @@ function render(context) {
 	drawSquares(context);
 	drawPallet(context);
 	drawTools(context);
+	var showGrid = grid ? drawGrid(context): false;	
 	drawCaption(context,caption.value);
 
 	if (logo.ready) {
@@ -311,7 +338,7 @@ function blankScreen() {
 
 	for (var col = 0; col < sheet.cols; ++col) {
   		for (var row	 = 0; row < sheet.rows; ++row) {	
-		newSquares.push(new Square(sheet.x + (pixelSize * col),(pixelSize * row)));
+		newSquares.push(new Square(sheet.x + (pixelSize * col),sheet.y + (pixelSize * row)));
  		 }
 	 }	
 
@@ -369,6 +396,7 @@ function detect(loc) {
 	if (context.isPointInPath(loc.x, loc.y)) {
 		eightBitTool.color = selectedColor;
 		selectedTool = eightBitTool;
+		eightBitTool.selected = true;
 		paintTool.selected = false;
 		fillTool.selected = false;
 	} 
