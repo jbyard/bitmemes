@@ -3,8 +3,8 @@
 var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d');
 
-canvas.width = 900;
-canvas.height = 600;
+canvas.width = 640;
+canvas.height = 420;
 
 // initialize variables.............................................................................................................
 
@@ -18,8 +18,8 @@ var swatchSize = 16;
 var sheet = { 
 	x: 75,
 	y: 20,
-	cols:84,
-	rows:60
+	cols:64,
+	rows:40
 };
 
 var captionInput = document.getElementById('caption');
@@ -229,11 +229,12 @@ function drawSquares(context) {
 }
 
 function drawCaption(context, caption) {
-	var size = 48;
 
-	context.font =  + size + "px sans-serif";
+	context.font = "bold 32px Courier";
 	context.textAlign = 'center';
     context.fillStyle = "white";
+	context.strokeStyle = 'black';
+	context.lineWidth = 1;
 
 	context.fillText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
 
@@ -276,42 +277,8 @@ function render(context) {
 	drawCaption(context,caption.value);
 
 	if (logo.ready) {
-		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 202, (sheet.rows * pixelSize) - 27);	
+		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 150, sheet.y + (sheet.rows * pixelSize) - 27);	
 	}
-}
-
-function changeRes(res) {
-	var previous = cloneSquares(squares);
-
-	switch (res) {
-	  case 8: if (sheet.res != 8) {
-	  			pixelSize = 16;
-	  			sheet.cols = 42;
-				sheet.rows = 30;
-				 for (count1 = 0,count2 = 0; count1 < squares.length; ++count1, count2 + 2 ) {
-			      			squares[count1].color = previous[count].color;
-				  
-				 }
-				 sheet.res = 8;
-	  		   }
-	     break
-
-	  case 16:  
-	  			 if (sheet.res != 16) { 
-				 	pixelSize = 8;
-	  			 	sheet.cols = 84;
-				 	sheet.rows = 60;
-				 	squares = blankScreen();
-					 for (count1 = 0,count2 = 0; count2 < previous.length; count1 = count1 + 2, ++count2 ) {
-			      			squares[count1].color = previous[count2].color;
-					  }
-					sheet.res = 16;
-				 }
-		 break
-
-	}
-
-	render(context);
 }
 
 function cloneSquares(originals) {
