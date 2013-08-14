@@ -3,8 +3,8 @@
 var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d');
 
-canvas.width = 640;
-canvas.height = 420;
+canvas.width = 800;
+canvas.height = 640;
 
 // initialize variables.............................................................................................................
 
@@ -18,8 +18,8 @@ var swatchSize = 16;
 var sheet = { 
 	x: 75,
 	y: 20,
-	cols:64,
-	rows:40
+	cols:80,
+	rows:64
 };
 
 var captionInput = document.getElementById('caption');
@@ -108,63 +108,12 @@ for (var col = 0; col < 4; ++col) {
 		pallet.push(new Swatch(sheet.x - (swatchSize * col + swatchSize), sheet.y + (swatchSize * row)));
   }
 }
-			// the OG NES pallet minus the multiple blacks
-pallet[0].color   = "#7C7C7C";
-pallet[1].color   = "#0000FC";
-pallet[2].color   = "#0000BC";
-pallet[3].color   = "#4428BC";
-pallet[4].color   = "#940084";
-pallet[5].color   = "#A80020";
-pallet[6].color   = "#A81000";
-pallet[7].color   = "#881400";
-pallet[8].color   = "#503000";
-pallet[9].color   = "#007800";
-pallet[10].color  = "#006800";
-pallet[11].color  = "#005800";
-pallet[12].color  = "#004058";
-pallet[13].color  = "#BCBCBC";
-pallet[14].color  = "#0078F8";
-pallet[15].color  = "#0058F8";
-pallet[16].color  = "#6844FC";
-pallet[17].color  = "#D800CC";
-pallet[18].color  = "#E40058";
-pallet[19].color  = "#F83800";
-pallet[20].color  = "#E45C10";
-pallet[21].color  = "#AC7C00";
-pallet[22].color  = "#00B800";
-pallet[23].color  = "#00A800";
-pallet[24].color  = "#00A844";
-pallet[25].color  = "#008888";
-pallet[26].color  = "#F8F8F8";
-pallet[27].color  = "#3CBCFC";
-pallet[28].color  = "#6888FC";
-pallet[29].color  = "#9878F8";
-pallet[30].color  = "#F878F8";
-pallet[31].color  = "#F85898";
-pallet[32].color  = "#F87858";
-pallet[33].color  = "#FCA044";
-pallet[34].color  = "#F8B800";
-pallet[35].color  = "#B8F818";
-pallet[36].color  = "#58D854";
-pallet[37].color  = "#58F898";
-pallet[38].color  = "#00E8D8";
-pallet[39].color  = "#787878";
-pallet[40].color  = "#FCFCFC";
-pallet[41].color  = "#A4E4FC";
-pallet[42].color  = "#B8B8F8";
-pallet[43].color  = "#D8B8F8";
-pallet[44].color  = "#F8B8F8";
-pallet[45].color  = "#F8A4C0";
-pallet[46].color  = "#F0D0B0";
-pallet[47].color  = "#FCE0A8";
-pallet[48].color  = "#F8D878";
-pallet[49].color  = "#D8F878";
-pallet[50].color  = "#B8F8B8";
-pallet[51].color  = "#B8F8D8";
-pallet[52].color  = "#00FCFC";
-pallet[53].color  = "#F8D8F8";
-pallet[54].color  = "#000000";
-pallet[55].color  = 'rgba(0,0,0,0)';
+			
+if (NESpallet) {
+	for (count = 0; count < pallet.length; ++count) {
+		pallet[count].color = NESpallet[count];
+	}
+}
 
 // create the tools..............................................................................................................
 
@@ -245,14 +194,14 @@ function drawGrid(context) {
 	context.strokeStyle = 'white';
 	context.lineWidth= 0.25;
 	
-	for (var vert = sheet.x; vert < sheet.x + (sheet.cols * pixelSize); vert += pixelSize) {
+	for (var vert = sheet.x; vert < sheet.x + (sheet.cols * pixelSize) + pixelSize; vert += pixelSize) {
 		context.beginPath();
 		context.moveTo(vert, sheet.y);
 		context.lineTo(vert, sheet.y + (sheet.rows * pixelSize));		
 		context.stroke();
 	  }
 	  
-	for (var horz = sheet.y; horz < sheet.y + (sheet.rows * pixelSize); horz += pixelSize) {
+	for (var horz = sheet.y; horz < sheet.y + (sheet.rows * pixelSize) + pixelSize; horz += pixelSize) {
 		context.beginPath();
 		context.moveTo(sheet.x, horz);
 		context.lineTo(sheet.x + (sheet.cols * pixelSize), horz);
@@ -329,7 +278,7 @@ function detect(loc) {
 			switch (selectedTool) {
 				case paintTool: paintTool.paint(squares[count]);
 			      break
-				case eightBitTool: eightBitTool.paint(squares[count]); //this is kinda ugly
+				case eightBitTool: eightBitTool.paint(squares[count]);     //this is kinda ugly
 									down1 = count + 1;
 									eightBitTool.paint(squares[down1]);
 									bottomOfSheet = count % sheet.rows === 0;
