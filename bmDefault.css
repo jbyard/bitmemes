@@ -1,38 +1,41 @@
 @charset "UTF-8";
 /* CSS Document */
 
+a {	color:#444444;
+	text-decoration:none;
+}
+
 body{
-	background-color:#222222;
+	background-color:#DDDDDD;
 	padding: 2em;
 	font-family:"Press Start 2P";
+	font-size:small;
+	color:#111111;
 	
 }
 
-canvas{
-	margin:3%;
+h1 {
+	color:#222222;
+
+}
+
+img {
+	margin:.5em;
 }
 
 #caption{
-
-	width:64%;
+	width:68%;
 	font-family:"Press Start 2P";
-	font-size:24px;
-	margin-left:3%;
-	margin-top:0;
 	border:solid;
 	border-width:5px;
+	margin:0l
 }
 
-#panel {
-	position:absolute;
-	right: 0;
-	top:0;
-	width:20%;
-	border:solid;
-	background-color:#444444;
+#container {
+	    width: 700px ;
+  		margin-left: auto ;
+ 	    margin-right: auto ;
 }
 
-a {
-	color:#00DD00;
-	text-decoration:none;
-}
+
+

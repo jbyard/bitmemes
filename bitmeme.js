@@ -3,8 +3,8 @@
 var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d');
 
-canvas.width = 800;
-canvas.height = 640;
+canvas.width = 640;
+canvas.height = 580;
 
 // initialize variables.............................................................................................................
 
@@ -16,8 +16,8 @@ var selectedTool = "";
 var grid = false;
 var swatchSize = 16;
 var sheet = { 
-	x: 75,
-	y: 20,
+	x: 0,
+	y: 0,
 	cols:80,
 	rows:64
 };
@@ -103,9 +103,9 @@ Swatch.prototype = {
 
 var pallet = Array();
 
-for (var col = 0; col < 4; ++col) {
-  for (var row	 = 0; row < 14; ++row) {	
-		pallet.push(new Swatch(sheet.x - (swatchSize * col + swatchSize), sheet.y + (swatchSize * row)));
+for (var col = 0; col < 28; ++col) {
+  for (var row	 = 0; row < 2; ++row) {	
+		pallet.push(new Swatch(sheet.x + (swatchSize * col + swatchSize), (10 + sheet.y + sheet.rows * pixelSize) + (swatchSize * row)));
   }
 }
 			
@@ -117,7 +117,7 @@ if (NESpallet) {
 
 // create the tools..............................................................................................................
 
-var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,sheet.y + 
+var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,10 + sheet.y + 
 										sheet.rows * pixelSize + 2);
 
 paintTool.selected = true;
@@ -127,7 +127,7 @@ paintTool.paint = function(square) {
 }
 selectedTool = paintTool;
 
-var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50, sheet.y +
+var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
 								sheet.rows * pixelSize + 2);
 
 eightBitTool.size  = swatchSize * 2;
@@ -135,7 +135,7 @@ eightBitTool.paint = function(square) {
 	  square.color = selectedColor;
 }
 
-var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50, sheet.y +
+var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
 									    sheet.rows * pixelSize + 2);
 
 fillTool.size = swatchSize * 3;
@@ -405,4 +405,4 @@ var squares = blankScreen();
 
 render(context);
 
-alert('YOU SUCK AT JEWEL THEIF, YOU REALLY SUCK SUCK');
+// alert('YOU SUCK AT JEWEL THEIF, YOU REALLY SUCK SUCK');

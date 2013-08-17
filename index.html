@@ -2,24 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>BitMemes.com - draw some pixels, add some captions</title>
+<title>BitMemes.com - beta!</title>
 <link rel='stylesheet' type='text/css' href='bmDefault.css' media='all' />
 <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 </head>
-
 <body>
+<div id='container'>
+<div id=top>
+<div id='logo'>
+<a href="index.html"><img src='siteImages/logo_big.png' style="vertical-align:middle;"/></a>
+<a href="about.html">about</a>
+</div>
 <canvas id='canvas'>canvas not supported</canvas>
 <script src="clipart/megaLike.js"></script>
 <script src="pallets/NES.js"></script>
 <script src="bitmeme.js"></script>
-<input type="text" id="caption" />
-<div id='panel'>
-action panel!
-<ul>
-<li onclick="loadSquares(megaLike); return false;"><a href="#">megaLike</a></li>
-</ul>
-<a href="#" onclick="toggleGrid(); return false">Grid</a></br>
-<a href="#" onclick="makeJSON(); return false">make JSON</a>
+<div id='controls'>
+<input type="text" id="caption" /><input type="checkbox" onclick="render(context); return false" /></br>
+Grid: <input type="checkbox" onclick="toggleGrid(); return false" />
+</div>
 </div>
 </body>
 </html>
