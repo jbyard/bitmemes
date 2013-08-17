@@ -5,14 +5,11 @@ a html5 canvas full of a bunch of squares that you can color.
 and just when you thought the fun was all over, you can add
 a snazzy caption at the bottom.
 
-there are two "tools" for drawing: a single square painter and 
-a mis-behaving fill tool.  The fill tool colors all the squares
-on the sheet that are the same color as the square the user clicks
-on.  It's a little sloppy, it only fills up to the click location.
+to-do:
+======
 
-the 8 bit / 16 bit doesn't really work yet
-
-the "make Json" link writes the current sheet to the browser window
-as a JSON object.  I've been cutting and pasting that into a new .js 
-file as a crude save/load routine.  yup.
+- fix the bottom row bug.  The 8bit tool paints the very top row when clicking the very bottom row.
+- parse caption into multiple lines when reaching a certain length
+-export/share button
+-get the fill tool to work the way normal fill tools work
 
