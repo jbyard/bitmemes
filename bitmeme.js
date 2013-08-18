@@ -131,8 +131,19 @@ var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize *
 								sheet.rows * pixelSize + 2);
 
 eightBitTool.size  = swatchSize * 2;
-eightBitTool.paint = function(square) {
-	  square.color = selectedColor;
+eightBitTool.paint = function(targetSquare) {
+	  
+	  squares[targetSquare].color = selectedColor;
+	  		
+	  var over = targetSquare + sheet.rows;
+		if (over < squares.length)  squares[over].color = selectedColor;	
+
+	  var down = targetSquare + 1;
+	  	if ( down % sheet.rows !== 0 ) squares[down].color = selectedColor;
+		
+	  var diag = over + 1;
+	  	if ( diag % sheet.rows !== 0 && diag < squares.length )  squares[diag].color = selectedColor;
+	  
 }
 
 var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
@@ -278,16 +289,7 @@ function detect(loc) {
 			switch (selectedTool) {
 				case paintTool: paintTool.paint(squares[count]);
 			      break
-				case eightBitTool: eightBitTool.paint(squares[count]);     //this is kinda ugly
-									down1 = count + 1;
-									eightBitTool.paint(squares[down1]);
-									bottomOfSheet = count % sheet.rows === 0;
-						
-									over1 = count + sheet.rows;
-									eightBitTool.paint(squares[over1]);
-									overDown = count + 1 + sheet.rows;
-									eightBitTool.paint(squares[overDown]);
-								
+				case eightBitTool: eightBitTool.paint(count);   
 				  break
 				case fillTool: fillTool.fill(squares[count]);
 				  break
