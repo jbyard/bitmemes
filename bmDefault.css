@@ -10,18 +10,23 @@ body{
 	padding: 2em;
 	font-family:"Press Start 2P";
 	font-size:small;
-	color:#111111;
+	color:#222222;
 	
 }
 
-h1 {
-	color:#222222;
+h1, h2,  h5, h6 {
+	color:#000000;
 
+}
+
+strong {color:#555555;
 }
 
 img {
 	margin:.5em;
 }
+
+
 
 #caption{
 	width:68%;
@@ -36,6 +41,5 @@ img {
   		margin-left: auto ;
  	    margin-right: auto ;
 }
-
 
 

@@ -163,6 +163,7 @@ fillTool.fill = function(square) {
 
 // a bunch o' functions.........................................................................................................
 
+
 function drawTools(context) {
 	context.lineWidth= 4;
 	
@@ -188,6 +189,8 @@ function drawSquares(context) {
 
 }
 
+
+
 function drawCaption(context, caption) {
 
 	context.font = "bold 32px Courier";
@@ -195,11 +198,13 @@ function drawCaption(context, caption) {
     context.fillStyle = "white";
 	context.strokeStyle = 'black';
 	context.lineWidth = 1;
-
+	
 	context.fillText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
 
 	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
 }
+
+
 
 function drawGrid(context) {
 	context.strokeStyle = 'white';
@@ -343,6 +348,19 @@ function detect(loc) {
 
 }
 
+function downloadImage(context) {
+	var busCanvas = document.createElement('canvas');
+	busCanvas.width = sheet.cols * pixelSize;
+	busCanvas.height = sheet.rows * pixelSize;
+	var busContext = busCanvas.getContext('2d');
+	
+	busContext.drawImage(canvas, sheet.x, sheet.y, busCanvas.width, busCanvas.height, 0 , 0, busCanvas.width, busCanvas.height  );
+	
+	var image = busCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	window.location.href=image;
+}
+
+
 function windowToCanvas(canvas, x, y) {    
 
 	var bbox = canvas.getBoundingClientRect();	
@@ -363,8 +381,8 @@ canvas.onmousemove = function (e){
 	var loc = windowToCanvas(canvas, e.clientX, e.clientY);
 
 	if (clicking) {
-
-		detect(loc);
+	
+	detect(loc);
 
 	}
 	render(context);
