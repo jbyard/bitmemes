@@ -17,8 +17,9 @@
 <script src="pallets/NES.js"></script>
 <script src="bitmeme.js"></script>
 <div id='controls'>
-<input type="text" id="caption" /><input type="checkbox" onclick="render(context); return false" /></br>
-Grid: <input type="checkbox" onclick="toggleGrid(); return false" />
+<input type="text" id="caption" /><input type="button" onclick="render(context); return false" value='caption'/></br>
+<input type="button" onclick="toggleGrid(); return false" value="grid"/></div>
+<input type="button" onclick="downloadImage(context); return false" value="download" />
 </div>
 </div>
 </body>
