@@ -9,6 +9,5 @@ to-do:
 ======
 
 - parse caption into multiple lines when reaching a certain length
-- export/share button
 - get the fill tool to work the way normal fill tools work
 
