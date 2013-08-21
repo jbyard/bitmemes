@@ -208,24 +208,28 @@ function drawCaption(context, caption) {
 
 function drawGrid(context) {
 	context.strokeStyle = 'white';
-	context.lineWidth= 0.25;
 	
-	for (var vert = sheet.x; vert < sheet.x + (sheet.cols * pixelSize) + pixelSize; vert += pixelSize) {
+	
+	for (var vert = sheet.x, flip = 0; vert < sheet.x + (sheet.cols * pixelSize) + pixelSize; vert += pixelSize, ++flip) {
 		context.beginPath();
-		context.moveTo(vert, sheet.y);
+		context.moveTo(vert, sheet.y); 
+		flip % 2 == 0 ? context.lineWidth = 0.5 : context.lineWidth = 0.25; 
 		context.lineTo(vert, sheet.y + (sheet.rows * pixelSize));		
 		context.stroke();
 	  }
 	  
-	for (var horz = sheet.y; horz < sheet.y + (sheet.rows * pixelSize) + pixelSize; horz += pixelSize) {
+	for (var horz = sheet.y, flop = 0; horz < sheet.y + (sheet.rows * pixelSize) + pixelSize; horz += pixelSize, ++flop) {
 		context.beginPath();
 		context.moveTo(sheet.x, horz);
+		flop % 2 == 0 ? context.lineWidth = 0.5 : context.lineWidth = 0.25; 
 		context.lineTo(sheet.x + (sheet.cols * pixelSize), horz);
 		context.stroke();	
 	 }
 	
+	context.lineWidth= 0.25;
 	
 }
+
 function toggleGrid() {
 	grid = grid ? false: true;
 	render(context);
