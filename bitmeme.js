@@ -204,7 +204,7 @@ function drawCaption(context, caption) {
 	context.strokeStyle = 'black';
 	context.lineWidth = 1;
 	
-	// parse caption into lines one word at a time
+	// parse caption into lines of text one word at a time
 
 	for (word = 0; word < words.length; ++word) { 
 		
@@ -227,7 +227,7 @@ function drawCaption(context, caption) {
 
 	} 
 	
-	// draw each line, offsetting each line verticaly 
+	// draw each line of text, offsetting each line verticaly 
 
 	for (row = 0; row < lines.length; ++row) {
 
