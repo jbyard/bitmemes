@@ -189,9 +189,14 @@ function drawSquares(context) {
 
 }
 
-
-
 function drawCaption(context, caption) {
+	
+	var letter = 0;
+	var limit = 32;
+	var line = 0;
+	var lines = Array();
+	var offset = 32;
+	var words = caption.split(" ")
 
 	context.font = "bold 32px Courier";
 	context.textAlign = 'center';
@@ -199,12 +204,45 @@ function drawCaption(context, caption) {
 	context.strokeStyle = 'black';
 	context.lineWidth = 1;
 	
-	context.fillText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
+	// parse caption into lines one word at a time
 
-	context.strokeText(caption, (sheet.x + (sheet.cols * pixelSize / 2)), (squares[sheet.rows - 4]).y );
+	for (word = 0; word < words.length; ++word) { 
+		
+		// add word to line if it's within the line's character limit...
+
+		if (letter + words[word].length < limit) { 
+
+		 lines[line] ? lines[line] = lines[line] + words[word] + " " : lines[line] = words[word] + " ";
+		 letter = letter + words[word].length + 1;
+			
+		// ...or create the next line, and the reset character count.
+
+		} else {
+
+			line = line + 1;
+			
+			--word;
+			letter = 0;
+		}
+
+	} 
+	
+	// draw each line, offsetting each line verticaly 
+
+	for (row = 0; row < lines.length; ++row) {
+
+		context.fillText(lines[row], 
+						(sheet.x + (sheet.cols * pixelSize / 2)),
+						(sheet.y + (sheet.rows * pixelSize)) - 
+						(lines.length * offset) + (row * offset));
+		
+		context.strokeText(lines[row], 
+					      (sheet.x + (sheet.cols * pixelSize / 2)),
+						  (sheet.y + (sheet.rows * pixelSize)) - 
+						  (lines.length * offset) + (row * offset));
+	}	
+
 }
-
-
 
 function drawGrid(context) {
 	context.strokeStyle = 'white';
