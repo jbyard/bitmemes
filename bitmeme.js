@@ -166,7 +166,7 @@ fillTool.fill = function(index) {
 	} 
 	
 	var right = index + sheet.rows;
-	if (right <= squares.length) {
+	if (right < squares.length) {
 		if (squares[right].color == colorOfindex) this.fill(right);
 	}
 
