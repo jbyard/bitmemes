@@ -150,12 +150,34 @@ var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y 
 									    sheet.rows * pixelSize + 2);
 
 fillTool.size = swatchSize * 3;
-fillTool.fill = function(square) {
 
-	for (var count = 0; count < squares.length; ++count) {
-		if (squares[count].color == square.color) {
-			squares[count].color = selectedColor;	
-		}
+fillTool.fill = function(index) {
+	
+	// retain the original color of center square, then color it the selected color
+
+	var colorOfindex = squares[index].color;
+	squares[index].color = selectedColor;
+
+	// look at neighbors and if they are on page and the same color, call this function on them
+	
+	var up = index - 1;
+	if ( index % sheet.rows !== 0 ) {
+		if (squares[up].color == colorOfindex) this.fill(up); 
+	} 
+	
+	var right = index + sheet.rows;
+	if (right <= squares.length) {
+		if (squares[right].color == colorOfindex) this.fill(right);
+	}
+
+	var down = index + 1;
+	if (down % sheet.rows !== 0) {
+		if (squares[down].color == colorOfindex) this.fill(down);
+	}
+
+	var left = index - sheet.rows;
+	if(left > 0) {
+		if (squares[left].color == colorOfindex) this.fill(left);
 	}
 }
 
@@ -338,7 +360,7 @@ function detect(loc) {
 			      break
 				case eightBitTool: eightBitTool.paint(count); 				
 				  break
-				case fillTool: fillTool.fill(squares[count]);
+				case fillTool: fillTool.fill(count);
 				  break
 				default:  paintTool.paint(squares[count]);
 				  break
