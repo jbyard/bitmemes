@@ -16,7 +16,9 @@
 	</div>
   	<canvas id='canvas'>canvas not supported</canvas>
 	<div id='controls'>
-  	  <input type="text" id="caption" /><input type="button" onclick="render(context); return false" value='caption'/></br>
+  	  <form>
+  	  	<input type="text" id="caption" /><input type="submit" onclick="render(context); return false" value='caption'/>
+  	  </form></br>
   	  <input type="button" onclick="toggleGrid(); return false" value="grid"/></div>
   	  <input type="button" onclick="downloadImage(context); return false" value="download image" />
   	  <input type="button" onclick="exportJSON(); return false" value="download JSON file" />

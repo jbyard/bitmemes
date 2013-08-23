@@ -53,7 +53,7 @@ var sheet = {
 	rows:64
 };
 
-var captionInput = document.getElementById('caption');
+
 var undo = Array;
 
 logo = new Image();
@@ -242,8 +242,14 @@ function drawSquares(context) {
 
 }
 
-function drawCaption(context, caption) {
+function drawCaption(context) {
 	
+	// get the caption from the document
+
+	var caption = (document.getElementById('caption')).value;
+
+	// text formatting variables 
+
 	var letter = 0;
 	var limit = 32;
 	var line = 0;
@@ -251,7 +257,12 @@ function drawCaption(context, caption) {
 	var offset = 32;
 	var words = caption.split(" ")
 
-	context.font = "bold 32px Courier";
+	// base font size on the caption's length 
+
+	caption.length < 12 ? context.font = "bold 72px Courier": context.font = "bold 32px Courier";
+
+	// font styles
+
 	context.textAlign = 'center';
     context.fillStyle = "white";
 	context.strokeStyle = 'black';
@@ -263,7 +274,7 @@ function drawCaption(context, caption) {
 		
 		// add word to line if it's within the line's character limit...
 
-		if (letter + words[word].length < limit) { 
+		if (letter + words[word].length < limit && letter < limit) { 
 
 		 lines[line] ? lines[line] = lines[line] + words[word] + " " : lines[line] = words[word] + " ";
 		 letter = letter + words[word].length + 1;
@@ -334,7 +345,7 @@ function render(context) {
 	drawPallet(context);
 	drawTools(context);
 	var showGrid = grid ? drawGrid(context): false;	
-	drawCaption(context,caption.value);
+	drawCaption(context);
 
 	if (logo.ready) {
 		context.drawImage(logo, (sheet.x + (sheet.cols * pixelSize)) - 150, sheet.y + (sheet.rows * pixelSize) - 27);	
