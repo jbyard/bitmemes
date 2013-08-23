@@ -8,19 +8,21 @@
 </head>
 <body>
 <div id='container'>
-<div id=top>
-<div id='logo'>
-<a href="index.html"><img src='siteImages/logo_big.png' style="vertical-align:middle;"/></a>
-<a href="about.html">about</a>
+	<div id=top>
+		<div id='logo'>
+		  <a href="index.html"><img src='siteImages/logo_big.png' style="vertical-align:middle;"/></a>
+		  <a href="about.html">about</a>
+	     </div>
+	</div>
+  	<canvas id='canvas'>canvas not supported</canvas>
+	<div id='controls'>
+  	  <input type="text" id="caption" /><input type="button" onclick="render(context); return false" value='caption'/></br>
+  	  <input type="button" onclick="toggleGrid(); return false" value="grid"/></div>
+  	  <input type="button" onclick="downloadImage(context); return false" value="download image" />
+  	  <input type="button" onclick="exportJSON(); return false" value="download JSON file" />
+	</div>
 </div>
-<canvas id='canvas'>canvas not supported</canvas>
 <script src="pallets/NES.js"></script>
 <script src="bitmeme.js"></script>
-<div id='controls'>
-<input type="text" id="caption" /><input type="button" onclick="render(context); return false" value='caption'/></br>
-<input type="button" onclick="toggleGrid(); return false" value="grid"/></div>
-<input type="button" onclick="downloadImage(context); return false" value="download" />
-</div>
-</div>
 </body>
 </html>

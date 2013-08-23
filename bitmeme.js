@@ -353,11 +353,6 @@ function cloneSquares(originals) {
 	return clones;
 }
 
-function loadSquares(f) {
-
-	squares = cloneSquares(JSON.parse(f));
-	render(context);
-}
 
 function blankScreen() {
 	
@@ -373,9 +368,14 @@ function blankScreen() {
 
 }
 
-function makeJSON() {
+function importJSON(src) {
+		squares = cloneSquares(JSON.parse(src));
+		render(context);
+}
 
-	document.write(JSON.stringify(undo));
+function exportJSON() {
+	window.location.href = 'data:Application/octet-stream,' +
+                         encodeURIComponent(JSON.stringify(squares));
 }
 
 function detect(loc) {
@@ -469,7 +469,10 @@ function windowToCanvas(canvas, x, y) {
 
 // user events......................................................................................................................
 
+canvas.drop = function (e) {
 
+	importJSON(e.dataTransfer.files[0]);
+}
 
 canvas.onmousemove = function (e){
 
