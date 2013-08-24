@@ -44,7 +44,7 @@ var clicking = false;
 var pixelSize = 8;
 var selectedColor = 'fcfcfc';
 var selectedTool = "";
-var grid = false;
+var grid = true;
 var swatchSize = 16;
 var sheet = { 
 	x: 0,
@@ -69,7 +69,7 @@ var Square = function (x,y) {
 
 	this.x = x;
 	this.y = y;
-	this.color = '#000';
+	this.color = 'rgba(0,0,0,0)';
 }
 
 Square.prototype = {
