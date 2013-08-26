@@ -42,4 +42,72 @@ img {
  	    margin-right: auto ;
 }
 
+/* ------------------------- menu bar ----------------------------- */
+
+#menu {
+	display: inline-block;
+	text-transform: uppercase;
+	color:#000;
+	}
+
+.menu, #menu .menu li {
+	margin:0px;
+	padding:0px;
+	
+}
+#menu li {
+	float:left;
+	display:inline;
+	cursor:pointer;
+	list-style:none;
+	margin:.1em;
+	padding:.5em;
+	position:relative;	
+	vertical-align:middle;
+
+}
+#menu li ul.first {
+	left:0px;
+	top:100%;
+
+}
+li, li a {
+ color:#000  text-decoration: none;
+}
+#menu .menu li {
+	width:100%;
+	line-height:30px;
+	border:none;
+}
+#menu li a {
+	display:block;
+	width:inherit;
+	height:inherit;
+}
+ul.menu {
+	display:none;
+	background-color:rgba(0,0,0,0.5);
+	padding:inherit;
+}
+#menu li:hover > a, #menu li:hover {
+	color:#fff;
+	background-color:rgba(0,0,0,0.5);
+}
+li:hover > .menu {
+	display:block;
+	position:absolute;
+	width:200px;
+	top:-2px;
+
+	z-index:1000;
+	border:none;
+}
+
+li:hover {
+	position:relative;
+	z-index:2000;
+}
+
+/* ----------------- end menu bar -------------------- */
+
 

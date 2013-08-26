@@ -11,18 +11,38 @@
 	<div id=top>
 		<div id='logo'>
 		  <a href="index.html"><img src='siteImages/logo_big.png' style="vertical-align:middle;"/></a>
-		  <a href="about.html">about</a>
 	     </div>
 	</div>
+	<ul id='menu'>
+	 	<li>options
+	 	 <ul class='menu first'>
+	 	 	<li><a onclick="toggleGrid(); return false">grid</a></li>
+	 	 	<li><a href="index.html">clear canvas</a></li>
+	 	 	<li><a onclick="return false">undo</a></li>
+	 	 </ul>
+	 	</li>
+	 	<li>save
+	 	 <ul class='menu first'>
+	  		<li><a onclick="downloadImage(context); return false">as image</a></li>
+	 	 	<li><a onclick="exportJSON(); return false">as working file</a></li>
+	 	 </ul>
+	 	</li>
+		<li>share
+		  <ul class='menu first'>
+		  	<li><a onclick="toggleGrid(); return false">via Imgur</a></li>
+		  </ul>
+		 </li>
+		<li>about
+		  <ul class='menu first'>
+			<li><a href="about.html">bitMemes</a></li>
+		  </ul>
+		</li>
+	</ul>
   	<canvas id='canvas'>canvas not supported</canvas>
 	<div id='controls'>
   	  <form>
   	  	<input type="text" id="caption" /><input type="submit" onclick="render(context); return false" value='caption'/>
   	  </form></br>
-  	  <a href="index.html"><input type="button" value="clear"/></a>
-  	  <input type="button" onclick="toggleGrid(); return false" value="grid"/></div>
-  	  <input type="button" onclick="downloadImage(context); return false" value="download image" />
-  	  <input type="button" onclick="exportJSON(); return false" value="download JSON file" />
 	</div>
 </div>
 <script src="pallets/NES.js"></script>
