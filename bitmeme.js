@@ -158,7 +158,8 @@ tools['16bitBrush'].size  = swatchSize;
 tools['16bitBrush'].do = function(squares, targetSquare) {
    squares[targetSquare].color = selectedColor;
 }
-selectedTool = tools['16bitBrush'];
+
+selectedTool = tools['16bitBrush']; 		// set default tool
 
 tools['8bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
 								sheet.rows * pixelSize + 2);
@@ -412,6 +413,7 @@ function detect(loc) {
 		tools[tool].createPath(context);
 		if (context.isPointInPath(loc.x, loc.y)) {
 			selectedTool = tools[tool];
+			tools[tool].color = selectedColor;
 		}
 	}
 	
