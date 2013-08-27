@@ -119,7 +119,7 @@ Swatch.prototype = {
 		context.fillStyle = this.color;
 		context.fill();
 
-		if (this.selected) {
+		if (selectedTool == this) {
 			context.strokeStyle = 'orange';
 		}
 
@@ -146,23 +146,25 @@ if (NESpallet) {
 	}
 }
 
-// create the tools..............................................................................................................
+// create the paint tools..............................................................................
 
-var paintTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,10 + sheet.y + 
+var tools = Array();
+
+tools['16bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,10 + sheet.y + 
 										sheet.rows * pixelSize + 2);
 
-paintTool.selected = true;
-paintTool.size  = swatchSize;
-paintTool.paint = function(square) {
-   square.color = selectedColor;
+tools['16bitBrush'].selected = true;
+tools['16bitBrush'].size  = swatchSize;
+tools['16bitBrush'].do = function(squares, targetSquare) {
+   squares[targetSquare].color = selectedColor;
 }
-selectedTool = paintTool;
+selectedTool = tools['16bitBrush'];
 
-var eightBitTool = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
+tools['8bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
 								sheet.rows * pixelSize + 2);
 
-eightBitTool.size  = swatchSize * 2;
-eightBitTool.paint = function(targetSquare) {
+tools['8bitBrush'].size  = swatchSize * 2;
+tools['8bitBrush'].do = function(squares, targetSquare) {
 	  
 	  squares[targetSquare].color = selectedColor;
 	  		
@@ -177,38 +179,38 @@ eightBitTool.paint = function(targetSquare) {
 	  
 }
 
-var fillTool  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
+tools['bucketFill']  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
 									    sheet.rows * pixelSize + 2);
 
-fillTool.size = swatchSize * 3;
+tools['bucketFill'].size = swatchSize * 3;
 
-fillTool.fill = function(index) {
-	
+tools['bucketFill'].do = function(squares, index) {
+
 	// retain the original color of center square, then color it the selected color
 
 	var colorOfindex = squares[index].color;
 	squares[index].color = selectedColor;
 
 	// look at neighbors and if they are on page and the same color, call this function on them
-	
+
 	var up = index - 1;
 	if ( index % sheet.rows !== 0 ) {
-		if (squares[up].color == colorOfindex) this.fill(up); 
+		if (squares[up].color == colorOfindex) this.do(squares, up); 
 	} 
-	
+
 	var right = index + sheet.rows;
 	if (right < squares.length) {
-		if (squares[right].color == colorOfindex) this.fill(right);
+		if (squares[right].color == colorOfindex) this.do(squares, right);
 	}
 
 	var down = index + 1;
 	if (down % sheet.rows !== 0) {
-		if (squares[down].color == colorOfindex) this.fill(down);
+		if (squares[down].color == colorOfindex) this.do(squares, down);
 	}
 
 	var left = index - sheet.rows;
 	if(left > 0) {
-		if (squares[left].color == colorOfindex) this.fill(left);
+		if (squares[left].color == colorOfindex) this.do(squares, left);
 	}
 }
 
@@ -218,18 +220,20 @@ fillTool.fill = function(index) {
 
 
 function drawTools(context) {
-	context.lineWidth= 4;
 	
-	paintTool.draw(context);
-	eightBitTool.draw(context);
-	fillTool.draw(context);	
+	context.lineWidth= 4;
+	tools['16bitBrush'].draw(context);
+	tools['8bitBrush'].draw(context);
+	tools['bucketFill'].draw(context);	
 
 }
 
 function drawPallet(context) {
 	context.lineWidth= 1;
 	for (var q = 0; q < pallet.length; ++q) {
-	pallet[q].draw(context);
+		
+		pallet[q].draw(context);
+	
 	}
 
 }
@@ -237,7 +241,9 @@ function drawPallet(context) {
 function drawSquares(context) {
 
 	for (var count = 0; count < squares.length; ++count) {
-	squares[count].draw(context);	
+		
+		squares[count].draw(context);	
+	
 	}
 
 }
@@ -397,50 +403,19 @@ function detect(loc) {
 		squares[count].createPath(context);
 		if (context.isPointInPath(loc.x, loc.y)) { 		
 
-			switch (selectedTool) {
-				case paintTool: paintTool.paint(squares[count]);
-			      break
-				case eightBitTool: eightBitTool.paint(count); 				
-				  break
-				case fillTool: fillTool.fill(count);
-				  break
-				default:  paintTool.paint(squares[count]);
-				  break
-			}
+			selectedTool.do(squares,count);
 		}
 	}
 
 	// check to see if mouse is over any tools
-
-	paintTool.createPath(context);
-	if (context.isPointInPath(loc.x, loc.y)) {
-		paintTool.color = selectedColor;
-		selectedTool = paintTool;
-		paintTool.selected = true;
-		eightBitTool.selected = false;
-		fillTool.selected = false;
-	} 
+	for (tool in tools) {
+		tools[tool].createPath(context);
+		if (context.isPointInPath(loc.x, loc.y)) {
+			selectedTool = tools[tool];
+		}
+	}
 	
-	eightBitTool.createPath(context);
-	if (context.isPointInPath(loc.x, loc.y)) {
-		eightBitTool.color = selectedColor;
-		selectedTool = eightBitTool;
-		eightBitTool.selected = true;
-		paintTool.selected = false;
-		fillTool.selected = false;
-	} 
-
-	fillTool.createPath(context);
-	if (context.isPointInPath(loc.x, loc.y)) {
-		fillTool.color = selectedColor;
-		selectedTool = fillTool;
-		fillTool.selected = true;
-		eightBitTool.selected = false;
-		paintTool.selected = false;
-	} 
-
 	// check to see if mouse is over any Swatches
-
 	for (var f = 0; f < pallet.length; ++f) {
 		pallet[f].createPath(context);
 		if (context.isPointInPath(loc.x, loc.y)) {		
