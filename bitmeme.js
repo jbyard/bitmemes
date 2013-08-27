@@ -54,7 +54,7 @@ var sheet = {
 };
 
 
-var undo = Array;
+var undoCache = Array;
 
 logo = new Image();
 logo.ready = false;
@@ -452,6 +452,11 @@ function windowToCanvas(canvas, x, y) {
 
 }
 
+function undo() {
+	squares = cloneSquares(undoCache);
+	render(context);
+}
+
 
 // user events......................................................................................................................
 
@@ -473,6 +478,7 @@ canvas.onmousemove = function (e){
 }
 
 canvas.onmouseup = function (e){
+	
 	clicking = false;	
 }
 
@@ -482,7 +488,7 @@ canvas.addEventListener('touchend', function(e) {
 
 canvas.onmousedown = function (e) {
     
-	undo = cloneSquares(squares);
+	undoCache = cloneSquares(squares);
 
 	var loc = windowToCanvas(canvas, e.clientX, e.clientY);
 
