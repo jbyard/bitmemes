@@ -473,7 +473,9 @@ function undo() {
 	render(context);
 }
 
-
+function selectTool(tool) {
+	selectedTool = tool;
+}
 // user events......................................................................................................................
 
 canvas.drop = function (e) {

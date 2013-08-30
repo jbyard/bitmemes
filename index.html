@@ -16,15 +16,47 @@
 	<ul id='menu'>
 	 	<li>options
 	 	 <ul class='menu first'>
-	 	 	<li><a onclick="toggleGrid(); return false">grid</a></li>
-	 	 	<li><a href="index.html">clear canvas</a></li>
-	 	 	<li><a onclick="undo(); return false">undo</a></li>
+	 	 	<li>
+	 	 		<a href="#" onclick="toggleGrid(); return false">toggle grid
+	 	 		<img src="siteImages/icons/grid.png"/></a>
+	 	 	</li>
+	 	 	<li>
+	 	 		<a href="index.html">clear screen
+	 	 		<img src="siteImages/icons/clear.png"/></a>
+	 	 	</li>
+	 	 	<li><a onclick="undo(); return false">undo last draw
+	 	 		<img src="siteImages/icons/undo.png"/></a>
+	 	 	</li>
+	 	 </ul>
+	 	</li>
+	 	<li>tools
+	 	 <ul class='menu first'>
+	 	 	<li>
+	 	 		<a onclick="selectTool(tools['16bitBrush']); return false">16bit Brush
+	 	 		<img src="siteImages/icons/16bitBrush.png"/></a>
+	 	 	</li>
+	 	 	<li>
+	 	 		<a onclick="selectTool(tools['8bitBrush']); return false">8bit Brush
+	 	 		<img src="siteImages/icons/8bitBrush.png"/></a>
+	 	 	</li>
+	 	 	<li>
+	 	 		<a onclick="selectTool(tools['bucketFill']); return false">Bucket Fill
+	 	 		<img src="siteImages/icons/bucketFill.png"/></a>
+	 	 	</li>
+	 	 	<li>
+	 	 		<a onclick="selectTool(tools['eyeDropper']); return false">eye dropper
+	 	 		<img src="siteImages/icons/eyeDropper.png"/></a>
+	 	 	</li>
 	 	 </ul>
 	 	</li>
 	 	<li>save
 	 	 <ul class='menu first'>
-	  		<li><a onclick="downloadImage(context); return false">as image</a></li>
-	 	 	<li><a onclick="exportJSON(); return false">as working file</a></li>
+	  		<li><a onclick="downloadImage(context); return false">as image
+	  			<img src="siteImages/icons/image.png"/></a>
+	  		</li>
+	 	 	<li><a onclick="exportJSON(); return false">as working file
+	 	 		<img src="siteImages/icons/disk.png"/></a>
+	 	 	</li>
 	 	 </ul>
 	 	</li>
 		<li>share
