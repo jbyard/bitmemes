@@ -150,6 +150,8 @@ if (NESpallet) {
 
 var tools = Array();
 
+// 16 bit brush tool
+
 tools['16bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,10 + sheet.y + 
 										sheet.rows * pixelSize + 2);
 
@@ -160,6 +162,8 @@ tools['16bitBrush'].do = function(squares, targetSquare) {
 }
 
 selectedTool = tools['16bitBrush']; 		// set default tool
+
+// 8 bit brush tool
 
 tools['8bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
 								sheet.rows * pixelSize + 2);
@@ -179,6 +183,8 @@ tools['8bitBrush'].do = function(squares, targetSquare) {
 	  	if ( diag % sheet.rows !== 0 && diag < squares.length )  squares[diag].color = selectedColor;
 	  
 }
+
+// bucket fill tool
 
 tools['bucketFill']  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
 									    sheet.rows * pixelSize + 2);
@@ -215,7 +221,14 @@ tools['bucketFill'].do = function(squares, index) {
 	}
 }
 
+// eye dropper tool
 
+tools['eyeDropper'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 7) - 50,10 + sheet.y + 
+										sheet.rows * pixelSize + 2);
+tools['eyeDropper'].size  = swatchSize;
+tools['eyeDropper'].do = function(squares, targetSquare) {
+   selectedColor = squares[targetSquare].color;
+}
 
 // a bunch o' functions.........................................................................................................
 
@@ -223,9 +236,9 @@ tools['bucketFill'].do = function(squares, index) {
 function drawTools(context) {
 	
 	context.lineWidth= 4;
-	tools['16bitBrush'].draw(context);
-	tools['8bitBrush'].draw(context);
-	tools['bucketFill'].draw(context);	
+	for (tool in tools) {
+		tools[tool].draw(context);
+	}
 
 }
 
