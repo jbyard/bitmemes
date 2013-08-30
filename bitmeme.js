@@ -227,7 +227,8 @@ tools['eyeDropper'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSiz
 										sheet.rows * pixelSize + 2);
 tools['eyeDropper'].size  = swatchSize;
 tools['eyeDropper'].do = function(squares, targetSquare) {
-   selectedColor = squares[targetSquare].color;
+   this.color = selectedColor = squares[targetSquare].color;
+
 }
 
 // a bunch o' functions.........................................................................................................
