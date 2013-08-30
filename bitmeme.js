@@ -129,6 +129,20 @@ Swatch.prototype = {
 
 }
 
+var Tool = function(src) {
+	this.image = new Image();
+	this.ready = false;
+	this.image.src = src;
+}
+
+Tool.prototype = {
+
+	onload: function(e) {
+
+		this.ready=true;
+	}
+}
+
 
 // create the Pallet, an array of swatches.........................................................................................
 
@@ -152,11 +166,10 @@ var tools = Array();
 
 // 16 bit brush tool
 
-tools['16bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 5) - 50,10 + sheet.y + 
-										sheet.rows * pixelSize + 2);
+tools['16bitBrush'] = new Tool('siteImages/icons/16bitBrush.png');
 
 tools['16bitBrush'].selected = true;
-tools['16bitBrush'].size  = swatchSize;
+
 tools['16bitBrush'].do = function(squares, targetSquare) {
    squares[targetSquare].color = selectedColor;
 }
@@ -165,10 +178,7 @@ selectedTool = tools['16bitBrush']; 		// set default tool
 
 // 8 bit brush tool
 
-tools['8bitBrush'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 3) -50,10 +  sheet.y +
-								sheet.rows * pixelSize + 2);
-
-tools['8bitBrush'].size  = swatchSize * 2;
+tools['8bitBrush'] = new Tool('siteImages/icons/8bitBrush.png');
 tools['8bitBrush'].do = function(squares, targetSquare) {
 	  
 	  squares[targetSquare].color = selectedColor;
@@ -186,10 +196,7 @@ tools['8bitBrush'].do = function(squares, targetSquare) {
 
 // bucket fill tool
 
-tools['bucketFill']  = new Swatch(sheet.x + (sheet.cols * pixelSize) -50,10 +  sheet.y +
-									    sheet.rows * pixelSize + 2);
-
-tools['bucketFill'].size = swatchSize * 3;
+tools['bucketFill']  = new Tool('siteImages/icons/bucketFill.png');
 
 tools['bucketFill'].do = function(squares, index) {
 
@@ -223,9 +230,7 @@ tools['bucketFill'].do = function(squares, index) {
 
 // eye dropper tool
 
-tools['eyeDropper'] = new Swatch(sheet.x + (sheet.cols * pixelSize) - (swatchSize * 7) - 50,10 + sheet.y + 
-										sheet.rows * pixelSize + 2);
-tools['eyeDropper'].size  = swatchSize;
+tools['eyeDropper'] = new Tool('siteImages/icons/eyeDropper.png');
 tools['eyeDropper'].do = function(squares, targetSquare) {
    this.color = selectedColor = squares[targetSquare].color;
 
@@ -234,11 +239,22 @@ tools['eyeDropper'].do = function(squares, targetSquare) {
 // a bunch o' functions.........................................................................................................
 
 
-function drawTools(context) {
-	
-	context.lineWidth= 4;
-	for (tool in tools) {
-		tools[tool].draw(context);
+function drawSelectedTool(context) {
+	var x = sheet.x + (sheet.cols * pixelSize) -100;
+	var y = 10 +  sheet.y + sheet.rows * pixelSize + 2;
+	var width = swatchSize * 3;
+	var height = swatchSize * 3;
+
+	context.beginPath();
+	context.moveTo(x, y);
+	context.rect(x, y, width, height);
+	context.closePath()
+	context.fillStyle = selectedColor;
+	context.fill();
+	context.stroke();
+
+	if (selectedTool) {
+		context.drawImage(selectedTool.image,0,0,80,80, x, y,width,height);	
 	}
 
 }
@@ -364,7 +380,7 @@ function render(context) {
 
 	drawSquares(context);
 	drawPallet(context);
-	drawTools(context);
+	drawSelectedTool(context);
 	var showGrid = grid ? drawGrid(context): false;	
 	drawCaption(context);
 
@@ -421,15 +437,6 @@ function detect(loc) {
 			selectedTool.do(squares,count);
 		}
 	}
-
-	// check to see if mouse is over any tools
-	for (tool in tools) {
-		tools[tool].createPath(context);
-		if (context.isPointInPath(loc.x, loc.y)) {
-			selectedTool = tools[tool];
-			tools[tool].color = selectedColor;
-		}
-	}
 	
 	// check to see if mouse is over any Swatches
 	for (var f = 0; f < pallet.length; ++f) {
@@ -475,6 +482,7 @@ function undo() {
 
 function selectTool(tool) {
 	selectedTool = tool;
+	render(context);
 }
 // user events......................................................................................................................
 
